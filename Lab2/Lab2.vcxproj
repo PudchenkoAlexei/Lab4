@@ -145,6 +145,8 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lab2.rc" />
+    <ResourceCompile Include="my_table.rc" />
+    <ResourceCompile Include="toolbar.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Lab2.ico" />
