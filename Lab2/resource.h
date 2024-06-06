@@ -16,14 +16,16 @@
 #define ID_32772                        32772
 #define ID_32773                        32773
 #define ID_32774                        32774
-#define ID_32775                        32775
-#define ID_32776                        32776
-#define IDM_POINT                       32777
-#define IDM_LINE                        32778
-#define IDM_RECT                        32779
-#define IDM_ELLIPSE                     32780
-#define IDM_CUBE                        32781
-#define IDM_POINT_LINE                  32782
+#define ID_32780                        32780
+#define ID_32781                        32781
+#define IDD_TABLEMENU                   32784
+#define IDM_POINT                       32805
+#define ID_LINE                         32806
+#define IDM_LINE                        32806
+#define IDM_RECT                        32807
+#define IDM_ELLIPSE                     32809
+#define IDM_CUBE                        32813
+#define IDM_POINT_LINE                  32855
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -32,7 +34,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        129
-#define _APS_NEXT_COMMAND_VALUE         32783
+#define _APS_NEXT_COMMAND_VALUE         32785
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
