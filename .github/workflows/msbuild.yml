@@ -8,7 +8,7 @@ on:
 
 env:
   # Шлях до файлу рішення відносно кореневої папки проекту.
-  SOLUTION_FILE_PATH: mark2.sln
+  SOLUTION_FILE_PATH: lab2.sln
 
   # Конфігурація збирання.
   BUILD_CONFIGURATION: Release
