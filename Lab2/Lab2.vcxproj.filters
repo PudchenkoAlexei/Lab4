@@ -67,12 +67,6 @@
     <ResourceCompile Include="Lab2.rc">
       <Filter>Файлы ресурсов</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="toolbar.rc">
-      <Filter>Файлы ресурсов</Filter>
-    </ResourceCompile>
-    <ResourceCompile Include="my_table.rc">
-      <Filter>Файлы ресурсов</Filter>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
