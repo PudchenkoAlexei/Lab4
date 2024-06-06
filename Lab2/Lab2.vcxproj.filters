@@ -67,6 +67,12 @@
     <ResourceCompile Include="Lab2.rc">
       <Filter>Файлы ресурсов</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="..\..\SimpleGraphicEditor\Lab2\toolbar.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\..\SimpleGraphicEditor\Lab2\my_table.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
