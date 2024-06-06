@@ -67,10 +67,10 @@
     <ResourceCompile Include="Lab2.rc">
       <Filter>Файлы ресурсов</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="..\..\SimpleGraphicEditor\Lab2\toolbar.rc">
+    <ResourceCompile Include="toolbar.rc">
       <Filter>Файлы ресурсов</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="..\..\SimpleGraphicEditor\Lab2\my_table.rc">
+    <ResourceCompile Include="my_table.rc">
       <Filter>Файлы ресурсов</Filter>
     </ResourceCompile>
   </ItemGroup>
