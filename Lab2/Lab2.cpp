@@ -1,21 +1,34 @@
-﻿// Lab2.cpp : Определяет точку входа для приложения.
+// Lab2.cpp : Определяет точку входа для приложения.
 //
 
 #include "framework.h"
 #include "Lab2.h"
+#include "resource.h"
+#include "toolbar.h"
+#include "myeditor.h"
+#include "MyTable.h"
+#include <fstream>
+using namespace std;
+
 
 #define MAX_LOADSTRING 100
 
 // Глобальные переменные:
 HINSTANCE hInst;                                // текущий экземпляр
 WCHAR szTitle[MAX_LOADSTRING];                  // Текст строки заголовка
-WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса главного окна
+WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса главного окн
+
+MyEditor* editorShape = MyEditor::getInstance();// Create editor shape object
+Toolbar tool;                                   // Create toolbar object
+HWND dlg = NULL;
+MyTable* table = new MyTable;
 
 // Отправить объявления функций, включенных в этот модуль кода:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+BOOL CALLBACK       DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -55,8 +68,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     return (int) msg.wParam;
 }
 
-
-
 //
 //  ФУНКЦИЯ: MyRegisterClass()
 //
@@ -76,7 +87,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_LAB2));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_LAB2);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_LAB2 );
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -97,7 +108,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Сохранить маркер экземпляра в глобальной переменной
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
@@ -123,14 +134,71 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    std::string str = "";
     switch (message)
     {
+    case WM_LBUTTONDOWN: //натиснуто ліву кнопку миші у клієнтській частині вікна
+        if (editorShape) editorShape->OnLBdown(hWnd);
+        break;
+    case WM_LBUTTONUP: //відпущено ліву кнопку миші у клієнтській частині вікна
+        if (editorShape) editorShape->OnLBup(hWnd);
+        str = editorShape->GetString();
+        table->Add(dlg, str);
+        break;
+    case WM_MOUSEMOVE: //пересунуто мишу у клієнтській частині вікна
+        if (editorShape) editorShape->OnMouseMove(hWnd);
+        break;
+    case WM_INITMENUPOPUP:
+        //editorShape.OnInitMenuPopup(hWnd, wParam);
+        break;
+    case WM_CREATE:
+        tool.OnCreate(hWnd);         // Create toolbar
+        if (editorShape) editorShape->Start(new EmptyShape);
+        break;
+    case WM_SIZE:
+        tool.OnSize(hWnd);           // Size of toolbar
+        break;
+    case WM_NOTIFY:
+        tool.OnNotify(hWnd, lParam); // Notify pressed button
+        break;
+    case WM_PAINT: //потрібно оновлення зображення клієнтської частині вікна
+        if (editorShape) editorShape->OnPaint(hWnd);
+        break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
             // Разобрать выбор в меню:
             switch (wmId)
             {
+            case IDD_TABLEMENU:
+                dlg = CreateDialog(hInst, MAKEINTRESOURCE(IDD_TABLE), 0, (DLGPROC)DlgProc);
+                ShowWindow(dlg, SW_SHOW);
+                SetWindowTextA(dlg, "Таблиця");
+                break;
+            case IDM_POINT:
+                tool.OnPointPressed(hWnd);
+                if (editorShape) editorShape->Start(new PointShape);
+                break;
+            case IDM_LINE:
+                tool.OnLinePressed(hWnd);
+                if (editorShape) editorShape->Start(new LineShape);
+                break;
+            case IDM_RECT:
+                tool.OnRectPressed(hWnd);
+                if (editorShape) editorShape->Start(new RectShape);
+                break;
+            case IDM_ELLIPSE:
+                tool.OnEllipsePressed(hWnd);
+                if (editorShape) editorShape->Start(new EllipseShape);
+                break;
+            case IDM_CUBE:
+                tool.OnCubePressed(hWnd);
+                if (editorShape) editorShape->Start(new CubeShape);
+                break;
+            case IDM_POINT_LINE:
+                tool.OnPointLinePressed(hWnd);
+                if (editorShape) editorShape->Start(new PointLineShape);
+                break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
@@ -138,23 +206,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DestroyWindow(hWnd);
                 break;
             default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
+                return DefWindowProcW(hWnd, message, wParam, lParam);
             }
-        }
-        break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Добавьте сюда любой код прорисовки, использующий HDC...
-            EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
     default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
+        return DefWindowProcW(hWnd, message, wParam, lParam);
     }
     return 0;
 }
@@ -175,6 +235,58 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             return (INT_PTR)TRUE;
         }
         break;
+    }
+    return (INT_PTR)FALSE;
+}
+
+BOOL CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    string path = "./table.txt";
+    ifstream f;
+    switch (uMsg)
+    {
+    case WM_INITDIALOG:
+        f.open(path);
+        if (!f.is_open()) 
+        {
+            throw new exception("Can't open the file");
+        }
+        else 
+        {
+            string str;
+            HWND hList = GetDlgItem(hWnd, IDC_LIST);
+            while (!f.eof()) 
+            {
+                str = "";
+                getline(f, str);
+                if (!str.empty()) 
+                {
+                    int len = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
+                    LPWSTR buffer = new WCHAR[len];
+                    MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, buffer, len);
+
+                    SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)buffer);
+
+                    delete[] buffer;
+                }
+            }
+        }
+        f.close();
+        return (INT_PTR)TRUE;
+        break;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDCLEAR)
+        {
+            std::ofstream clear;
+            clear.open(path, std::ofstream::out | std::ofstream::trunc);
+            clear.close();
+            SendDlgItemMessage(hWnd, IDC_LIST, LB_RESETCONTENT, 0, 0);
+        }
+        if (LOWORD(wParam) == IDCANCEL)
+        {
+            DestroyWindow(hWnd);
+            return TRUE;
+        }
     }
     return (INT_PTR)FALSE;
 }
