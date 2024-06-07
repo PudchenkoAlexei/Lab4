@@ -1,0 +1,13 @@
+Figure: Cube|x1: 279|y1: 193|x2: 324|y2: 257|
+Figure: Cube|x1: 788|y1: 197|x2: 722|y2: 272|
+Figure: Cube|x1: 1045|y1: 226|x2: 1101|y2: 366|
+Figure: Points with line|x1: 317|y1: 102|x2: 488|y2: 158|
+Figure: Points with line|x1: 625|y1: 92|x2: 554|y2: 213|
+Figure: Rectangle|x1: 149|y1: 287|x2: 243|y2: 496|
+Figure: Rectangle|x1: 475|y1: 557|x2: 327|y2: 623|
+Figure: Ellipse|x1: 600|y1: 467|x2: 730|y2: 595|
+Figure: Line|x1: 133|y1: 128|x2: 209|y2: 274|
+Figure: Line|x1: 269|y1: 144|x2: 76|y2: 274|
+Figure: Point|x1: 109|y1: 201|x2: 115|y2: 201|
+Figure: Point|x1: 247|y1: 189|x2: 252|y2: 185|
+Figure: Point|x1: 260|y1: 190|x2: 367|y2: 253|
